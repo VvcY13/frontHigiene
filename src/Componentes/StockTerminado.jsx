@@ -8,6 +8,7 @@ function StockTerminado() {
     const [productos, setProductos] = useState([]);
     const [medidas, setMedidas] = useState([]);
     const [selectedProductId, setSelectedProductId] = useState(''); // Estado para el producto seleccionado
+    const [selectedMeasureId, setSelectedMeasureId] = useState('');
 
     const fetchStockData = async () => {
         try {
@@ -127,9 +128,15 @@ function StockTerminado() {
     };
 
     // Filtrar los datos por el producto seleccionado
-    const filteredStockData = selectedProductId
+    /*const filteredStockData = selectedProductId
         ? stockData.filter(item => item.id_producto === selectedProductId)
-        : stockData;
+        : stockData;*/
+
+        const filteredStockData = stockData.filter(item => {
+            const matchProduct = selectedProductId ? item.id_producto === selectedProductId : true;
+            const matchMeasure = selectedMeasureId ? item.id_medida === selectedMeasureId : true;
+            return matchProduct && matchMeasure;
+        });
 
     // Calcular los totales
     const totalCantidadUnitaria = filteredStockData.reduce((total, item) => total + parseInt(item.cantidad_unitaria), 0);
@@ -181,7 +188,7 @@ function StockTerminado() {
             <button onClick={() => exportToExcel(formattedData)} className="btn btn-success mb-3">
                 Exportar a Excel
             </button>
-            <div className="mb-3">
+            {/*<div className="mb-3">
                 <label htmlFor="producto" className="form-label">Filtrar por Producto</label>
                 <select
                     className="form-select"
@@ -195,7 +202,43 @@ function StockTerminado() {
                         </option>
                     ))}
                 </select>
-            </div>
+            </div>*/}
+
+<div className="mb-3">
+    <label htmlFor="producto" className="form-label">Filtrar por Producto</label>
+    <select
+        className="form-select"
+        value={selectedProductId}
+        onChange={(e) => setSelectedProductId(e.target.value)}
+    >
+        <option value="">Todos los productos</option>
+        {productos.map((producto) => (
+            <option key={producto.id} value={producto.id}>
+                {producto.nombre}
+            </option>
+        ))}
+    </select>
+</div>
+
+<div className="mb-3">
+    <label htmlFor="medida" className="form-label">Filtrar por Medida</label>
+    <select
+        className="form-select"
+        value={selectedMeasureId}
+        onChange={(e) => setSelectedMeasureId(e.target.value)}
+    >
+        <option value="">Todas las medidas</option>
+        {medidas.map((medida) => (
+            <option key={medida.id} value={medida.id}>
+                {medida.nombreMedida}
+            </option>
+        ))}
+    </select>
+</div>
+
+
+
+
             <div className="card mt-4">
                 <div className="card-header">
                     <h3>Lista de Productos</h3>
@@ -207,6 +250,8 @@ function StockTerminado() {
                                 <th style={{ width: '5%' }}>ID</th>
                                 <th style={{ width: '10%' }}>Producto</th>
                                 <th style={{ width: '5%' }}>Cantidad</th>
+                                <th style={{ width: '5%' }}>largo</th>
+                                <th style={{ width: '5%' }}>ancho</th>
                                 {/*<th style={{ width: '15%' }}>Cantidad Bolsas</th>*/}
                                 <th style={{ width: '13%' }}>Resultado Bolsas</th>
                                 <th style={{ width: '13%' }}>Sobrante Bolsas</th>
@@ -220,6 +265,7 @@ function StockTerminado() {
                         <tbody>
                             {filteredStockData.map((item) => {
                                 const cantidadUnit = parseInt(item.cantidad_unitaria);
+                                
                                 const cantidadBolsas = parseInt(item.medida.cantidad_bolsas) || 1;
                                 const cantidadBolsones = parseInt(item.medida.cantidad_bolsones) || 1;
 
@@ -233,6 +279,8 @@ function StockTerminado() {
                                         <td>{item.id}</td>
                                         <td>{item.producto ? item.producto.nombre : 'N/A'}</td>
                                         <td>{item.cantidad_unitaria}</td>
+                                        <td>{item.medida.largo}</td>
+                                        <td>{item.medida.ancho}</td>
                                         {/*<td>{item.medida ? item.medida.cantidad_bolsas : 'N/A'}</td>*/}
                                         <td>{resultadoBolsas}</td>
                                         <td>{sobranteBolsas}</td>
