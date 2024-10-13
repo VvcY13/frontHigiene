@@ -9,6 +9,8 @@ import Layout from './Componentes/Layout';
 import Almacenes from './Componentes/Almacenes';
 import Produccion from './Componentes/Produccion';
 import Insumos from './Componentes/Insumos';
+import StockGeneral from './Componentes/StockGeneral';
+import Salidas from './Componentes/Salidas';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
       <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/stock" element={<StockTerminado />} />
+          <Route path="/stockGeneral" element={<StockGeneral />} />
+          <Route path="/salidas" element={<Salidas />} />
           <Route path="/almacenes" element={<Almacenes />} />
           <Route path="/produccion" element={<Produccion />} />
           <Route path="/insumos" element={<Insumos />} />

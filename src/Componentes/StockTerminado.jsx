@@ -7,8 +7,10 @@ function StockTerminado() {
     const [newStock, setNewStock] = useState({ id_producto: '', id_medida: '', cantidad_unitaria: '' });
     const [productos, setProductos] = useState([]);
     const [medidas, setMedidas] = useState([]);
-    const [selectedProductId, setSelectedProductId] = useState(''); // Estado para el producto seleccionado
+    const [selectedProductId, setSelectedProductId] = useState(''); 
     const [selectedMeasureId, setSelectedMeasureId] = useState('');
+    const [startDate, setStartDate] = useState(''); 
+    const [endDate, setEndDate] = useState(''); 
 
     const fetchStockData = async () => {
         try {
@@ -42,9 +44,9 @@ function StockTerminado() {
             }
         };
 
-        fetchStockData(); // Llamamos a la función para obtener datos de stock
-        fetchProductos(); // Llamamos a la función para obtener productos
-        fetchMedidas();   // Llamamos a la función para obtener medidas
+        fetchStockData(); 
+        fetchProductos(); 
+        fetchMedidas();  
     }, []);
 
     const handleInputChange = (e) => {
@@ -127,15 +129,17 @@ function StockTerminado() {
             .catch(error => console.error('Error al eliminar el stock:', error));
     };
 
-    // Filtrar los datos por el producto seleccionado
-    /*const filteredStockData = selectedProductId
-        ? stockData.filter(item => item.id_producto === selectedProductId)
-        : stockData;*/
-
-        const filteredStockData = stockData.filter(item => {
-            const matchProduct = selectedProductId ? item.id_producto === selectedProductId : true;
-            const matchMeasure = selectedMeasureId ? item.id_medida === selectedMeasureId : true;
-            return matchProduct && matchMeasure;
+    
+            const filteredStockData = stockData.filter(item => {
+                const matchProduct = selectedProductId ? item.id_producto === selectedProductId : true;
+                const matchMeasure = selectedMeasureId ? item.id_medida === selectedMeasureId : true;
+        
+                // Filtrar por rango de fechas
+                const createdAt = new Date(item.created_at);
+                const isAfterStartDate = startDate ? createdAt >= new Date(startDate) : true;
+                const isBeforeEndDate = endDate ? createdAt <= new Date(endDate) : true;
+        
+                return matchProduct && matchMeasure && isAfterStartDate && isBeforeEndDate;
         });
 
     // Calcular los totales
@@ -183,27 +187,12 @@ function StockTerminado() {
   
     return (
         <div className="container mt-5">
-            <h1>Stock de Productos</h1>
+            <h1>Registrar Produccion</h1>
             {/* Botón para exportar */}
             <button onClick={() => exportToExcel(formattedData)} className="btn btn-success mb-3">
                 Exportar a Excel
             </button>
-            {/*<div className="mb-3">
-                <label htmlFor="producto" className="form-label">Filtrar por Producto</label>
-                <select
-                    className="form-select"
-                    value={selectedProductId}
-                    onChange={(e) => setSelectedProductId(e.target.value)}
-                >
-                    <option value="">Todos los productos</option>
-                    {productos.map((producto) => (
-                        <option key={producto.id} value={producto.id}>
-                            {producto.nombre}
-                        </option>
-                    ))}
-                </select>
-            </div>*/}
-
+            
 <div className="mb-3">
     <label htmlFor="producto" className="form-label">Filtrar por Producto</label>
     <select
@@ -235,13 +224,28 @@ function StockTerminado() {
         ))}
     </select>
 </div>
-
-
-
+<div className="mb-3">
+                <label htmlFor="startDate" className="form-label">Fecha de Inicio</label>
+                <input
+                    type="date"
+                    className="form-control"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="endDate" className="form-label">Fecha de Fin</label>
+                <input
+                    type="date"
+                    className="form-control"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                />
+            </div>
 
             <div className="card mt-4">
                 <div className="card-header">
-                    <h3>Lista de Productos</h3>
+                    <h3>Lista de Produccion</h3>
                 </div>
                 <div className="card-body">
                     <table className="table table-bordered w-100">

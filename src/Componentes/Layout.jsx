@@ -20,7 +20,13 @@ function Layout() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
-              <Link className="nav-link" to="/stock">Stock</Link>
+              <Link className="nav-link" to="/stock">Produccion</Link>
+              </li>
+              <li className="nav-item">
+              <Link className="nav-link" to="/stockGeneral">Stock General</Link>
+              </li>
+              <li className="nav-item">
+              <Link className="nav-link" to="/salidas">Salidas</Link>
               </li>
               <li className="nav-item">
               <Link className="nav-link" to="/almacenes">Almacenes</Link>
