@@ -1,42 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function Almacenes() {
   const [almacenStockData, setAlmacenStockData] = useState([]); // Datos del almacen stock
   const [almacenMaquinaData, setAlmacenMaquinaData] = useState([]); // Datos del almacen maquina
   const [insumos, setInsumos] = useState([]);
-  const [insumoSeleccionado, setInsumoSeleccionado] = useState('');
+  const [insumoSeleccionado, setInsumoSeleccionado] = useState("");
   const [cantidad, setCantidad] = useState(0);
   const [cantidadDisponible, setCantidadDisponible] = useState(0);
-  const [mensaje, setMensaje] = useState('');
+  const [mensaje, setMensaje] = useState("");
 
   // Función para obtener los insumos desde la API
   const fetchInsumos = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/insumos');
+      const response = await axios.get("http://localhost:8000/api/insumos");
       setInsumos(response.data);
     } catch (error) {
-      console.error('Error al obtener insumos:', error);
+      console.error("Error al obtener insumos:", error);
     }
   };
 
   // Función para obtener los datos del almacen_stock
   const fetchAlmacenStockData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/almacen-stock');
+      const response = await axios.get(
+        "http://localhost:8000/api/almacen-stock"
+      );
       setAlmacenStockData(response.data);
     } catch (error) {
-      console.error('Error al obtener datos del almacen stock:', error);
+      console.error("Error al obtener datos del almacen stock:", error);
     }
   };
 
   // Función para obtener los datos del almacen_maquina
   const fetchAlmacenMaquinaData = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/almacen-maquina');
+      const response = await axios.get(
+        "http://localhost:8000/api/almacen-maquina"
+      );
       setAlmacenMaquinaData(response.data);
     } catch (error) {
-      console.error('Error al obtener datos del almacen maquina:', error);
+      console.error("Error al obtener datos del almacen maquina:", error);
     }
   };
 
@@ -44,10 +48,12 @@ function Almacenes() {
   const fetchCantidadDisponible = async () => {
     if (insumoSeleccionado) {
       try {
-        const response = await axios.get(`http://localhost:8000/api/almacen_stock/${insumoSeleccionado}`);
+        const response = await axios.get(
+          `http://localhost:8000/api/almacen_stock/${insumoSeleccionado}`
+        );
         setCantidadDisponible(response.data.cantidad); // Ajusta según la respuesta de tu API
       } catch (error) {
-        console.error('Error al obtener cantidad disponible:', error);
+        console.error("Error al obtener cantidad disponible:", error);
       }
     }
   };
@@ -76,30 +82,38 @@ function Almacenes() {
     }
 
     if (cantidadNumerica > cantidadDisponible) {
-      setMensaje(`Error: No hay suficiente cantidad disponible. Solo hay ${cantidadDisponible}.`);
+      setMensaje(
+        `Error: No hay suficiente cantidad disponible. Solo hay ${cantidadDisponible}.`
+      );
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/api/almacen-maquina/traspasar', {
-        insumo_id: insumoSeleccionado,
-        cantidad: cantidadNumerica, // Usar la cantidad numérica
-      });
+      const response = await axios.post(
+        "http://localhost:8000/api/almacen-maquina/traspasar",
+        {
+          insumo_id: insumoSeleccionado,
+          cantidad: cantidadNumerica, // Usar la cantidad numérica
+        }
+      );
 
       setMensaje(`Traspaso realizado con éxito: ${response.data.message}`);
       setCantidad(0);
-      setInsumoSeleccionado(''); // Resetear insumo seleccionado
+      setInsumoSeleccionado(""); // Resetear insumo seleccionado
       setCantidadDisponible(0); // Resetear la cantidad disponible
-      
+
       // Volver a cargar los datos de los almacenes después del traspaso
       fetchAlmacenStockData();
       fetchAlmacenMaquinaData();
-      
     } catch (error) {
       if (error.response) {
-        setMensaje(`Error: ${error.response.data.message || 'No se pudo realizar el traspaso.'}`);
+        setMensaje(
+          `Error: ${
+            error.response.data.message || "No se pudo realizar el traspaso."
+          }`
+        );
       } else {
-        setMensaje('Error al comunicarse con el servidor.');
+        setMensaje("Error al comunicarse con el servidor.");
       }
     }
   };
@@ -130,7 +144,9 @@ function Almacenes() {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="cantidad">Cantidad a Traspasar (Disponible: {cantidadDisponible})</label>
+          <label htmlFor="cantidad">
+            Cantidad a Traspasar (Disponible: {cantidadDisponible})
+          </label>
           <input
             type="number"
             className="form-control"

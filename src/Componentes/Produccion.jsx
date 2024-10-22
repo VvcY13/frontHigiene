@@ -1,12 +1,27 @@
 // src/pages/Produccion.js
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function Produccion() {
   // Datos simulados de producción
   const [produccionData, setProduccionData] = useState([
-    { id: 1, producto: 'Producto A', cantidadProducida: 100, fecha: '2024-10-01' },
-    { id: 2, producto: 'Producto B', cantidadProducida: 150, fecha: '2024-10-02' },
-    { id: 3, producto: 'Producto C', cantidadProducida: 200, fecha: '2024-10-03' },
+    {
+      id: 1,
+      producto: "Producto A",
+      cantidadProducida: 100,
+      fecha: "2024-10-01",
+    },
+    {
+      id: 2,
+      producto: "Producto B",
+      cantidadProducida: 150,
+      fecha: "2024-10-02",
+    },
+    {
+      id: 3,
+      producto: "Producto C",
+      cantidadProducida: 200,
+      fecha: "2024-10-03",
+    },
   ]);
 
   return (

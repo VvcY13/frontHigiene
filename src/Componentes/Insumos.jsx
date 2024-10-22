@@ -1,13 +1,13 @@
 // src/pages/Insumos.js
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function Insumos() {
   const [insumoData, setInsumoData] = useState([]);
-  const [nombre, setNombre] = useState('');
-  const [diametroStandar, setDiametroStandar] = useState('');
-  const [kilosStandar, setKilosStandar] = useState('');
-  const [error, setError] = useState('');
+  const [nombre, setNombre] = useState("");
+  const [diametroStandar, setDiametroStandar] = useState("");
+  const [kilosStandar, setKilosStandar] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchInsumos();
@@ -15,7 +15,7 @@ function Insumos() {
 
   const fetchInsumos = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/insumos');
+      const response = await axios.get("http://127.0.0.1:8000/api/insumos");
       setInsumoData(response.data);
     } catch (err) {
       console.error(err);
@@ -24,18 +24,18 @@ function Insumos() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/insumos', {
+      const response = await axios.post("http://127.0.0.1:8000/api/insumos", {
         nombre,
         diametro_standar: diametroStandar,
         kilos_standar: kilosStandar,
       });
       setInsumoData([...insumoData, response.data]);
-      setNombre('');
-      setDiametroStandar('');
-      setKilosStandar('');
+      setNombre("");
+      setDiametroStandar("");
+      setKilosStandar("");
     } catch (err) {
       if (err.response && err.response.status === 422) {
         setError(err.response.data);
@@ -90,10 +90,14 @@ function Insumos() {
             min="0"
           />
         </div>
-        {error && <div className="alert alert-danger">{JSON.stringify(error)}</div>}
-        <button type="submit" className="btn btn-primary mt-3">Agregar Insumo</button>
+        {error && (
+          <div className="alert alert-danger">{JSON.stringify(error)}</div>
+        )}
+        <button type="submit" className="btn btn-primary mt-3">
+          Agregar Insumo
+        </button>
       </form>
-      
+
       <div className="card mt-4">
         <div className="card-header">
           <h3>Lista de Insumos</h3>
@@ -117,7 +121,12 @@ function Insumos() {
                   <td>{item.diametro_standar}</td>
                   <td>{item.kilos_standar}</td>
                   <td>
-                    <button onClick={() => handleDelete(item.id)} className="btn btn-danger">Eliminar</button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="btn btn-danger"
+                    >
+                      Eliminar
+                    </button>
                   </td>
                 </tr>
               ))}

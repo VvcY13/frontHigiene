@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Asegúrate de que useNavigate esté importado correctamente
-import Swal from 'sweetalert2'; // Importa SweetAlert2
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom"; // Asegúrate de que useNavigate esté importado correctamente
+import Swal from "sweetalert2"; // Importa SweetAlert2
 
 function Register() {
-  const [nombres, setNombres] = useState('');
-  const [apellidos, setApellidos] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [tipoDocumento, setTipoDocumento] = useState('DNI');
-  const [numeroDocumento, setNumeroDocumento] = useState('');
-  
+  const [nombres, setNombres] = useState("");
+  const [apellidos, setApellidos] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [tipoDocumento, setTipoDocumento] = useState("DNI");
+  const [numeroDocumento, setNumeroDocumento] = useState("");
+
   const navigate = useNavigate(); // Usa el hook useNavigate
 
   const handleRegister = (e) => {
@@ -19,9 +19,9 @@ function Register() {
     if (password !== confirmPassword) {
       // Reemplaza alert por SweetAlert
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Las contraseñas no coinciden',
+        icon: "error",
+        title: "Error",
+        text: "Las contraseñas no coinciden",
       });
       return;
     }
@@ -35,48 +35,50 @@ function Register() {
       password,
     };
 
-    fetch('http://127.0.0.1:8000/api/users', {
-      method: 'POST',
+    fetch("http://127.0.0.1:8000/api/users", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Error al registrar el usuario');
+          throw new Error("Error al registrar el usuario");
         }
         return response.json();
       })
       .then((data) => {
-        console.log('Usuario registrado:', data);
+        console.log("Usuario registrado:", data);
         // Reemplaza alert por SweetAlert
         Swal.fire({
-          icon: 'success',
-          title: 'Registro Exitoso',
-          text: 'Usuario registrado con éxito',
+          icon: "success",
+          title: "Registro Exitoso",
+          text: "Usuario registrado con éxito",
         }).then(() => {
-          navigate('/'); // Usa navigate para redirigir
+          navigate("/"); // Usa navigate para redirigir
         });
       })
       .catch((error) => {
-        console.error('Error al registrar el usuario:', error);
+        console.error("Error al registrar el usuario:", error);
         // Reemplaza alert por SweetAlert
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Error al registrar el usuario',
+          icon: "error",
+          title: "Error",
+          text: "Error al registrar el usuario",
         });
       });
   };
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4" style={{ width: '400px' }}>
+      <div className="card p-4" style={{ width: "400px" }}>
         <h2 className="text-center mb-4">Registrarse</h2>
         <form onSubmit={handleRegister}>
           <div className="mb-3">
-            <label htmlFor="nombres" className="form-label">Nombre Completo</label>
+            <label htmlFor="nombres" className="form-label">
+              Nombre Completo
+            </label>
             <input
               type="text"
               className="form-control"
@@ -88,7 +90,9 @@ function Register() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="apellidos" className="form-label">Apellidos</label>
+            <label htmlFor="apellidos" className="form-label">
+              Apellidos
+            </label>
             <input
               type="text"
               className="form-control"
@@ -100,7 +104,9 @@ function Register() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="tipoDocumento" className="form-label">Tipo de Documento</label>
+            <label htmlFor="tipoDocumento" className="form-label">
+              Tipo de Documento
+            </label>
             <select
               className="form-control"
               id="tipoDocumento"
@@ -109,11 +115,15 @@ function Register() {
               required
             >
               <option value="DNI">DNI</option>
-              <option value="CARNET DE EXTRANJERIA">CARNET DE EXTRANJERIA</option>
+              <option value="CARNET DE EXTRANJERIA">
+                CARNET DE EXTRANJERIA
+              </option>
             </select>
           </div>
           <div className="mb-3">
-            <label htmlFor="numeroDocumento" className="form-label">Número de Documento</label>
+            <label htmlFor="numeroDocumento" className="form-label">
+              Número de Documento
+            </label>
             <input
               type="text"
               className="form-control"
@@ -125,7 +135,9 @@ function Register() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">Correo Electrónico</label>
+            <label htmlFor="email" className="form-label">
+              Correo Electrónico
+            </label>
             <input
               type="email"
               className="form-control"
@@ -137,7 +149,9 @@ function Register() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">Contraseña</label>
+            <label htmlFor="password" className="form-label">
+              Contraseña
+            </label>
             <input
               type="password"
               className="form-control"
@@ -149,7 +163,9 @@ function Register() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="confirmPassword" className="form-label">Confirmar Contraseña</label>
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirmar Contraseña
+            </label>
             <input
               type="password"
               className="form-control"
@@ -160,9 +176,13 @@ function Register() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">Registrarse</button>
+          <button type="submit" className="btn btn-primary w-100">
+            Registrarse
+          </button>
           <div className="text-center mt-3">
-            <p>¿Tienes una cuenta? <Link to="/">Inicia Sesión</Link></p>
+            <p>
+              ¿Tienes una cuenta? <Link to="/">Inicia Sesión</Link>
+            </p>
           </div>
         </form>
       </div>
