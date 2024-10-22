@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Asegúrate de que useNavigate esté importado correctamente
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 function Register() {
   const [nombres, setNombres] = useState('');
@@ -16,7 +17,12 @@ function Register() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      alert('Las contraseñas no coinciden');
+      // Reemplaza alert por SweetAlert
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Las contraseñas no coinciden',
+      });
       return;
     }
 
@@ -44,12 +50,23 @@ function Register() {
       })
       .then((data) => {
         console.log('Usuario registrado:', data);
-        alert('Usuario registrado con éxito');
-        navigate('/'); // Usa navigate para redirigir
+        // Reemplaza alert por SweetAlert
+        Swal.fire({
+          icon: 'success',
+          title: 'Registro Exitoso',
+          text: 'Usuario registrado con éxito',
+        }).then(() => {
+          navigate('/'); // Usa navigate para redirigir
+        });
       })
       .catch((error) => {
         console.error('Error al registrar el usuario:', error);
-        alert('Error al registrar el usuario');
+        // Reemplaza alert por SweetAlert
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error al registrar el usuario',
+        });
       });
   };
 

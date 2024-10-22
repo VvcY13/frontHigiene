@@ -2,35 +2,51 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // Importa SweetAlert2
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(null); 
 
     try {
-      
       const response = await axios.post('http://127.0.0.1:8000/api/login', {
         email,
         password,
       });
-          
-          localStorage.setItem('authToken', response.data.token);
-          navigate('/home'); 
-        } catch (err) {
-          
-          if (err.response) {
-            setError('Credenciales inválidas'); 
-          } else {
-            setError('Ocurrió un error inesperado'); 
-          }
-        }
-      };
+
+      localStorage.setItem('authToken', response.data.token);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Inicio de sesión exitoso',
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        navigate('/home'); // Redirige al home después de iniciar sesión
+      });
+
+    } catch (err) {
+      if (err.response) {
+        // Muestra SweetAlert para credenciales inválidas
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Credenciales inválidas',
+        });
+      } else {
+        // Muestra SweetAlert para errores inesperados
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error inesperado',
+        });
+      }
+    }
+  };
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -63,7 +79,6 @@ function Login() {
           </div>
           <button type="submit" className="btn btn-primary w-100">Iniciar Sesión</button>
         </form>
-        {error && <p className="text-danger text-center mt-3">{error}</p>} {/* Muestra el error si hay */}
         <div className="text-center mt-3">
           <p>¿No tienes una cuenta? <Link to="/register">Registrarse</Link></p>
         </div>
@@ -71,5 +86,4 @@ function Login() {
     </div>
   );
 }
-
 export default Login;
